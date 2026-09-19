@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#E8F0F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#102A43">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RoadMap APC · Tracciato"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Pronto"
+            android:textColor="#DCE8F4"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <WebView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="#FFFFFF">
+        <TextView
+            android:id="@+id/metricsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Distanza: 0 m · Eventi: 0 · GPS in attesa"
+            android:textColor="#26394E"
+            android:textSize="13sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+            <Button android:id="@+id/connectButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Connetti BLE" />
+            <Button android:id="@+id/sessionButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Avvia" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button android:id="@+id/exportButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Esporta CSV" />
+            <Button android:id="@+id/saveMapButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Salva mappa" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/followGpsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Riposizionati e segui GPS" />
+    </LinearLayout>
+</LinearLayout>

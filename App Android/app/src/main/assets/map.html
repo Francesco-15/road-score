@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>html,body,#map{margin:0;width:100%;height:100%;background:#e8f0f5}.leaflet-control-attribution{font-size:9px}.note{position:absolute;z-index:999;top:9px;left:9px;background:#fff;padding:7px 9px;border-radius:7px;font:12px sans-serif;box-shadow:0 1px 5px #789}</style></head>
+<body><div id="map"></div><div class="note" id="note">In attesa del GPS</div><script>
+const map=L.map('map',{zoomControl:true}).setView([41.9028,12.4964],6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:20,attribution:'© OpenStreetMap'}).addTo(map);
+let route=L.layerGroup().addTo(map), markers=L.layerGroup().addTo(map), position=null, following=true, recentering=false, lastGps=null;
+map.on('movestart',()=>{if(!recentering&&following){following=false;document.getElementById('note').textContent='Esplorazione mappa · tocca “Segui GPS” per riprendere';}});
+window.followGps=function(){if(!lastGps)return;following=true;recentering=true;map.setView(lastGps,Math.max(map.getZoom(),18),{animate:true});map.once('moveend',()=>{recentering=false;});setTimeout(()=>{recentering=false;},500);document.getElementById('note').textContent='GPS attivo · seguimento continuo';};
+function color(score){return score>=80?'#22c55e':score>=60?'#eab308':score>=40?'#f97316':'#dc2626'}
+window.updateRoad=function(points,events,scores){
+ route.clearLayers();markers.clearLayers();
+ if(points.length){const last=points[points.length-1];lastGps=[last[0],last[1]];if(!position)position=L.circleMarker(lastGps,{radius:8,color:'#fff',weight:3,fillColor:'#0f766e',fillOpacity:1}).addTo(map);else position.setLatLng(lastGps);if(following){recentering=true;map.setView(lastGps,Math.max(map.getZoom(),18),{animate:true});map.once('moveend',()=>{recentering=false;});setTimeout(()=>{recentering=false;},500);document.getElementById('note').textContent='GPS attivo · seguimento continuo';}}
+ for(let i=1;i<points.length;i++){let a=points[i-1],b=points[i],data=scores[b[2]]??[100,0],score=data[0],count=data[1];L.polyline([[a[0],a[1]],[b[0],b[1]]],{color:color(score),weight:9,opacity:.9,lineCap:'round'}).bindTooltip('Segmento '+(b[2]+1)+' · score '+Math.round(score)+'/100 · eventi: '+count).addTo(route)}
+ events.filter(Boolean).forEach(e=>L.circleMarker([e[0],e[1]],{radius:6,color:'#fff',weight:2,fillColor:'#475569',fillOpacity:1}).bindPopup('<b>Evento rilevato</b><br>Severità: '+Math.round(e[2])+'/100<br>Confidenza: '+Math.round(e[3])+'/100').addTo(markers));
+};
+</script></body></html>
